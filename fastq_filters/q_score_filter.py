@@ -159,7 +159,7 @@ def run_qscore_filter(fastq_path, expected_sequence,
     # Run filter
     results_count = run_filter(output_file_name, failed_file_name,
                                fastq_sequences, q_score_helper, expected_sequence,
-                               verbose=True, use_pool=False, **kwargs)
+                               verbose=True, use_pool=True, **kwargs)
 
     # Print summary statistics to stdout
     out = sys.stdout
@@ -190,8 +190,13 @@ def main():
                                      parents=[FILTER_BASE_PARSER])
     args = parser.parse_args()
 
+    if re.match(args.expected_sequence):
+        _expected_sequence = args.expected_sequence
+    else:
+        raise RuntimeError('{} is an invalid sequence!'.format(SEQUENCE_RE))
+
     for fname in args.input_files:
-        run_qscore_filter(fname, args.expected_sequence,
+        run_qscore_filter(fname, _expected_sequence,
                           nThread=args.nThread,
                           output_dir_path=args.output_dir,
                           chunk_size=1000, update_period=1e5,

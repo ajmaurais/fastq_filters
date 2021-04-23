@@ -119,8 +119,13 @@ def main():
                                      parents=[FILTER_BASE_PARSER, MISMATCH_FILTER_BASE])
     args = parser.parse_args()
 
+    if re.match(args.expected_sequence):
+        _expected_sequence = args.expected_sequence
+    else:
+        raise RuntimeError('{} is an invalid sequence!'.format(SEQUENCE_RE))
+
     for fname in args.input_files:
-        run_mismatch_filter(fname, args.expected_sequence,
+        run_mismatch_filter(fname, _expected_sequence,
                             nThread=args.nThread,
                             chunk_size=1e6,
                             update_period=int(1e6),
