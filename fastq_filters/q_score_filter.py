@@ -7,10 +7,10 @@ import time
 
 from Bio import SeqIO
 
-from filter_generics import FilterResult, run_filter
-from base_parsers import FILTER_BASE_PARSER
-from base_parsers.filter_base_parser import OPTIONS as filter_options
-from constants import EXCLUDE_AT_END, EXCLUDE_AT_START, DEFAULT_Q0,\
+from .filter_generics import FilterResult, run_filter
+from .base_parsers import FILTER_BASE_PARSER
+from .base_parsers.filter_base_parser import OPTIONS as filter_options
+from .constants import EXCLUDE_AT_END, EXCLUDE_AT_START, DEFAULT_Q0,\
                       DEFAULT_Q1, DEFAULT_Q2, DEFAULT_QF
 
 
@@ -189,8 +189,6 @@ def main():
     parser = argparse.ArgumentParser(description='Apply Q filter to fastq file(s).',
                                      parents=[FILTER_BASE_PARSER])
     args = parser.parse_args()
-
-    # expected_sequence = 'CCGCCTAGGAGTACGGTCTCGCTCGAATATTTGCATGTCGCTATGTGTTCTGGGAAATCACCATAAACGTGAAATGTCTTTGGATTTGGGAATCTTATATAGCTTGTGCGCCGCTTGGGTACCTCGGAACGAGACCCGATCCGCTCGCAC'
 
     for fname in args.input_files:
         run_qscore_filter(fname, args.expected_sequence,

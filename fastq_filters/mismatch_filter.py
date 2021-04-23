@@ -5,12 +5,12 @@ import argparse
 from multiprocessing import cpu_count
 import time
 
-import filter_generics
-from base_parsers import FILTER_BASE_PARSER, MISMATCH_FILTER_BASE
-from base_parsers.mismatch_filter import OPTIONS as mismatch_filter_options
-from base_parsers.filter_base_parser import OPTIONS as filter_options
-from constants import QUERY_OFFSET, EXCLUDE_AT_END, EXCLUDE_AT_START, RANDOMIZED_LENGTH,\
-                      N_RANDOM_REGIONS, ADDITIONAL_MISMATCHES, QUERY_OFFSET
+from .filter_generics import run_filter, FilterResult
+from .base_parsers import FILTER_BASE_PARSER, MISMATCH_FILTER_BASE
+from .base_parsers.mismatch_filter import OPTIONS as mismatch_filter_options
+from .base_parsers.filter_base_parser import OPTIONS as filter_options
+from .constants import QUERY_OFFSET, EXCLUDE_AT_END, EXCLUDE_AT_START, RANDOMIZED_LENGTH,\
+        N_RANDOM_REGIONS, ADDITIONAL_MISMATCHES, QUERY_OFFSET
 
 
 def mismatch_filter(query, expected_sequence,
@@ -118,8 +118,6 @@ def main():
     parser = argparse.ArgumentParser(description='Apply mismatch filter to txt files.',
                                      parents=[FILTER_BASE_PARSER, MISMATCH_FILTER_BASE])
     args = parser.parse_args()
-
-    # expected_sequence = 'CCGCCTAGGAGTACGGTCTCGCTCGAATATTTGCATGTCGCTATGTGTTCTGGGAAATCACCATAAACGTGAAATGTCTTTGGATTTGGGAATCTTATATAGCTTGTGCGCCGCTTGGGTACCTCGGAACGAGACCCGATCCGCTCGCAC'
 
     for fname in args.input_files:
         run_mismatch_filter(fname, args.expected_sequence,
