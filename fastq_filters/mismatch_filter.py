@@ -49,7 +49,7 @@ def mismatch_filter(query, expected_sequence,
     end_index = len(expected_sequence) - exclude_at_end
 
     if len(_query) < end_index:
-        return filter_generics.FilterResult(False, 'len', query)
+        return FilterResult(False, 'len', query)
     
     total_mismatches = 0
     consecutive_mismatches = 0
@@ -65,8 +65,8 @@ def mismatch_filter(query, expected_sequence,
 
     total_mismatches -= min((randomized_length, longest_consecutive_mismtach))
     if total_mismatches > additional_mismatches:
-        return filter_generics.FilterResult(False, 'mismatch', query)    
-    return filter_generics.FilterResult(True, None, query)
+        return FilterResult(False, 'mismatch', query)    
+    return FilterResult(True, None, query)
 
 
 def sequence_generator(fname):
@@ -82,8 +82,8 @@ def run_mismatch_filter(input_file, expected_sequence,
     # initialize output file names
     fastq_base = os.path.splitext(os.path.basename(input_file))[0]
     output_dir = os.path.abspath(os.path.dirname(input_file)) if output_dir_path is None else output_dir_path
-    output_file_name = '{}/{}_mismatch_filtered.txt'.format(output_dir, fastq_base)
-    failed_file_name = '{}/{}_mismatch_failed.txt'.format(output_dir, fastq_base)
+    output_file_name = '{}/{}.mismatchFiltered.txt'.format(output_dir, fastq_base)
+    failed_file_name = '{}/{}.mismatchFailed.txt'.format(output_dir, fastq_base)
 
     # start timer
     start_time = time.time()
@@ -93,9 +93,9 @@ def run_mismatch_filter(input_file, expected_sequence,
     # Get entry generator
     seq_gen = sequence_generator(input_file)
 
-    filter_results = filter_generics.run_filter(output_file_name, failed_file_name,
-                                                seq_gen, mismatch_filter, expected_sequence,
-                                                verbose=True, use_pool=False, **kwargs)
+    filter_results = run_filter(output_file_name, failed_file_name,
+                                seq_gen, mismatch_filter, expected_sequence,
+                                verbose=True, use_pool=False, **kwargs)
     # Print summary statistics to stdout
     out = sys.stdout
     total = filter_results.total()

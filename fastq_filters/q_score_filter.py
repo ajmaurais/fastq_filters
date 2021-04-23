@@ -143,9 +143,9 @@ def run_qscore_filter(fastq_path, expected_sequence,
 
     # initialize output file names
     fastq_base = os.path.splitext(os.path.basename(fastq_path))[0]
-    output_dir = '.' if output_dir_path is None else output_dir_path
-    output_file_name = '{}/{}_q_score_filtered.txt'.format(output_dir, fastq_base)
-    failed_file_name = '{}/{}_q_score_failed.txt'.format(output_dir, fastq_base)
+    output_dir = os.path.abspath(os.path.dirname(fastq_path)) if output_dir_path is None else output_dir_path
+    output_file_name = '{}/{}.qScoreFiltered.txt'.format(output_dir, fastq_base)
+    failed_file_name = '{}/{}.qScoreFailed.txt'.format(output_dir, fastq_base)
 
     # start timer
     start_time = time.time()
