@@ -19,5 +19,6 @@ setup(name='fastq_filters',
         python_requires='>=3.6.*',
         install_requires=['biopython==1.78'],
         entry_points={'console_scripts': ['q_score_filter=fastq_filters:run_q_score_filter',
-                                          'mismatch_filter=fastq_filters:run_mismatch_filter']},
+                                          'mismatch_filter=fastq_filters:run_mismatch_filter',
+                                          'print_alignment=fastq_filters:run_print_alignment']},
         )
