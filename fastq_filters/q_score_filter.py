@@ -1,5 +1,6 @@
 
 import sys
+import re
 import os
 import argparse
 from multiprocessing import cpu_count
@@ -10,6 +11,7 @@ from Bio import SeqIO
 from .filter_generics import FilterResult, run_filter
 from .base_parsers import FILTER_BASE_PARSER
 from .base_parsers.filter_base_parser import OPTIONS as filter_options
+from .base_parsers.filter_base_parser import SEQUENCE_RE
 from .constants import EXCLUDE_AT_END, EXCLUDE_AT_START, DEFAULT_Q0,\
                       DEFAULT_Q1, DEFAULT_Q2, DEFAULT_QF
 
@@ -190,10 +192,10 @@ def main():
                                      parents=[FILTER_BASE_PARSER])
     args = parser.parse_args()
 
-    if re.match(args.expected_sequence):
+    if re.search(SEQUENCE_RE, args.expected_sequence):
         _expected_sequence = args.expected_sequence
     else:
-        raise RuntimeError('{} is an invalid sequence!'.format(SEQUENCE_RE))
+        raise RuntimeError('{} is an invalid sequence!'.format(args.expected_sequence))
 
     for fname in args.input_files:
         run_qscore_filter(fname, _expected_sequence,
