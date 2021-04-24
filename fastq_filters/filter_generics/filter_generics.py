@@ -208,6 +208,7 @@ def run_filter(output_file_name, failed_file_name,
 def print_alignment(hit, query, midline=None,
                     query_name='query', hit_name='hit', midline_name='',
                     match_char='|', mismatch_char=' ', truncated_char=' ',
+                    query_offset=0,
                     line_length=100, out=sys.stdout):
     '''
     Print a nicely formatted alignment between `hit and `query` to out.
@@ -229,6 +230,8 @@ def print_alignment(hit, query, midline=None,
         Midline char for mismatching bases.
     truncated_char: str, default ' '
         Midline char for truncated hit or query.
+    query_offset: int, default 0
+        Offset position of query in hit
     line_length: int, default 100
         Number of characters to print per line.
     out: ostream, default sys.stdout
@@ -240,11 +243,13 @@ def print_alignment(hit, query, midline=None,
     
     def _max_length(sequences):
         return max([len(seq) for seq in sequences])
+    
+    query = '{}{}'.format(' ' * query_offset, query)
 
     if midline is None:
         midline = ''
         for q, h in zip_longest(query, hit):
-            if q is None or h is None:
+            if q is None or h is None or q == ' ' or h == ' ':
                 midline += truncated_char
             elif q != h:
                 midline += mismatch_char
@@ -259,7 +264,7 @@ def print_alignment(hit, query, midline=None,
         end = (i + 1) * line_length
         end = end if end < length else length
 
-        for seq, name in zip((hit, midline, query), (hit_name, midline_name, query_name)):
+        for seq, name in zip((query, midline, hit), (query_name, midline_name, hit_name)):
             seq_end = len(seq[:end].replace(' ', ''))
             print_seq = seq[begin:end]
             if print_seq == '':
