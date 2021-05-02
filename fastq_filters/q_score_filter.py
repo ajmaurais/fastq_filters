@@ -161,7 +161,7 @@ def run_qscore_filter(fastq_path, expected_sequence,
     # Run filter
     results_count = run_filter(output_file_name, failed_file_name,
                                fastq_sequences, q_score_helper, expected_sequence,
-                               verbose=True, use_pool=True, **kwargs)
+                               verbose=True, use_pool=False, **kwargs)
 
     # Print summary statistics to stdout
     out = sys.stdout
