@@ -20,7 +20,8 @@ def mismatch_filter(query, expected_sequence,
                     exclude_at_start=EXCLUDE_AT_START,
                     exclude_at_end=EXCLUDE_AT_END,
                     randomized_length=RANDOMIZED_LENGTH,
-                    additional_mismatches=ADDITIONAL_MISMATCHES):
+                    additional_mismatches=ADDITIONAL_MISMATCHES,
+                    verbose_filter=False):
     '''
     Run base mismatch filter on query.
 
@@ -40,6 +41,8 @@ def mismatch_filter(query, expected_sequence,
         Length of ranzmized region.
     additional_mismatches: int
         Number of additional mismatches to allow.
+    verbose_filter: bool
+        Show verbose output for each sequence filtered?
 
     Returns
     -------
@@ -50,6 +53,11 @@ def mismatch_filter(query, expected_sequence,
     begin_index = exclude_at_start
     end_index = len(expected_sequence) - exclude_at_end
 
+    if verbose_filter:
+        print_alignment(expected_sequence, _query, line_length=200)
+        __query = ''
+        __expected_sequence = ''
+
     if len(_query) < end_index:
         return FilterResult(False, 'len', query)
     
@@ -57,6 +65,10 @@ def mismatch_filter(query, expected_sequence,
     consecutive_mismatches = 0
     longest_consecutive_mismtach = 0
     for i in range(begin_index, end_index):
+        if verbose_filter:
+            __query += _query[i]
+            __expected_sequence += expected_sequence[i]
+
         if _query[i] != expected_sequence[i]:
             total_mismatches += 1
             consecutive_mismatches += 1
@@ -64,6 +76,10 @@ def mismatch_filter(query, expected_sequence,
                 longest_consecutive_mismtach = consecutive_mismatches
         else:
             consecutive_mismatches = 0
+
+    if verbose_filter:
+        print(__query)
+        print(__expected_sequence + '\n')
 
     total_mismatches -= min((randomized_length, longest_consecutive_mismtach))
     if total_mismatches > additional_mismatches:

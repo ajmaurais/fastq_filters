@@ -23,7 +23,9 @@ def q_score_filter(query, Q_scores, expected_sequence,
                    Q1=DEFAULT_Q1,
                    Q2=DEFAULT_Q2,
                    QF=DEFAULT_QF,
-                   Q0=DEFAULT_Q0):
+                   Q0=DEFAULT_Q0,
+                   verbose_filter=False):
+
     '''
     Determine whether query sequence reads pass Q score thresholds.
 
@@ -52,6 +54,8 @@ def q_score_filter(query, Q_scores, expected_sequence,
         Absolute minimum allowed score for bases allowed by QF
     Q2: int
         Minimum allowed score for bases which do not match expected_sequence.
+    verbose_filter: bool
+        Show verbose output for each sequence filtered?
 
     Returns
     -------
@@ -63,12 +67,10 @@ def q_score_filter(query, Q_scores, expected_sequence,
     begin_index = exclude_at_start
     end_index = len(expected_sequence) - exclude_at_end
 
-    
-    # import filter_generics
-    # filter_generics.print_alignment(expected_sequence, _query)
-    # __query = ''
-    # __expected_sequence = ''
-
+    if verbose_filter:
+        print_alignment(expected_sequence, _query, line_length=200)
+        __query = ''
+        __expected_sequence = ''
 
     # Check whether lengths match up.
     assert(len(_Q_scores) == len(_query))
@@ -77,8 +79,9 @@ def q_score_filter(query, Q_scores, expected_sequence,
 
     failed_bases_count = 0
     for i in range(begin_index, end_index):
-        # __query += _query[i]
-        # __expected_sequence += expected_sequence[i]
+        if verbose_filter:
+            __query += _query[i]
+            __expected_sequence += expected_sequence[i]
 
         if _Q_scores[i] < Q0:
             return FilterResult(False, 'Q0', _query)
@@ -90,8 +93,9 @@ def q_score_filter(query, Q_scores, expected_sequence,
             if _Q_scores[i] < Q2:  # If they don't match, apply Q2 filter.
                 return FilterResult(False, 'Q2', query)
 
-    # print(__query)
-    # print(__expected_sequence + '\n')
+    if verbose_filter:
+        print(__query)
+        print(__expected_sequence + '\n')
 
     return FilterResult(True, None, query)
 
