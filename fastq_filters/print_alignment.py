@@ -9,7 +9,7 @@ from .base_parsers.filter_base_parser import SEQUENCE_RE
 def write_allignment(fname, expected_sequence, line_length=200,
                      exclude_at_start=0, exclude_at_end=0, query_offset=0):
     '''
-    Print formated alignments for sequences in `fname`.
+    Print formatted alignments for sequences in `fname`.
     '''
 
     # check arguments
@@ -38,7 +38,7 @@ def write_allignment(fname, expected_sequence, line_length=200,
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Print formated allignment between expected_sequence and sequences in input_files')
+    parser = argparse.ArgumentParser(description='Print formatted alignment between expected_sequence and sequences in input_files')
 
     parser.add_argument('--query_offset', default=0, type=int,
                     help='Offset at which expected_sequence should begin in query.')
